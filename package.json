@@ -1,6 +1,6 @@
 {
   "name": "typed-sql-graph",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Generate SQL queries based on a graph defined by joins between relations",
   "license": "MIT",
   "keywords": [
