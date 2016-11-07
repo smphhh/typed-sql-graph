@@ -1,0 +1,20 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Run mocha",
+			"type": "node",
+			"program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+			"stopOnEntry": false,
+			"args": ["--no-timeouts", "lib/**/__tests__/**/*.js"],
+			"cwd": "${workspaceRoot}",
+			"preLaunchTask": "build",
+			"request": "launch",
+			"runtimeExecutable": null,
+			"env": { "NODE_ENV": "production", "DEBUG": "" },
+			"console": "internalConsole",
+			"sourceMaps": true,
+			"outDir": "${workspaceRoot}/lib"
+		}
+	]
+}

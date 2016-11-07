@@ -1,0 +1,43 @@
+{
+  "name": "typed-sql-graph",
+  "version": "0.0.1",
+  "description": "Generate SQL queries based on a graph defined by joins between relations",
+  "license": "MIT",
+  "keywords": [
+    "typescript",
+    "sql",
+    "graph"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bdsoy/typed-sql-graph"
+  },
+  "main": "lib/index.js",
+  "author": {
+    "name": "Samuli Holopainen",
+    "email": "samuli.holopainen@yahoo.com"
+  },
+  "dependencies": {
+    "graphlib": "^2.1.1",
+    "simple-typed-sql": "^0.6.6"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-as-promised": "^5.3.0",
+    "mocha": "2.3.x",
+    "typescript": "^2.0.6",
+    "pg": "^6.0.3",
+    "@types/chai": "^3.4.34",
+    "@types/chai-as-promised": "^0.0.29",
+    "@types/graphlib": "^2.1.2",
+    "@types/knex": "^0.0.35",
+    "@types/mocha": "^2.2.32",
+    "@types/node": "^6.0.46"
+  },
+  "scripts": {
+    "start": "node lib/app.js",
+    "build": "tsc",
+    "test": "mocha lib/**/__tests__/**/*.js"
+  },
+  "typings": "./lib/index.d.ts"
+}
