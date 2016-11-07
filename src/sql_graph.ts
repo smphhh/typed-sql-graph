@@ -34,6 +34,14 @@ export class SqlGraph {
         this.graph.setNode(detailTableName, detailMapping);
 
         this.graph.setEdge(masterTableName, detailTableName, joinCondition);
+
+        let join: Join<T, U> = {
+            masterMapping,
+            detailMapping,
+            joinCondition
+        };
+
+        return join;
     }
 
     addJoin<T, U>(join: Join<T, U>) {
