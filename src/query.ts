@@ -1,5 +1,5 @@
 
-import { Mapper } from 'simple-typed-sql';
+import { Mapper, WrappedMappingData } from 'simple-typed-sql';
 
 import { FromQuery } from 'simple-typed-sql/lib/core';
 

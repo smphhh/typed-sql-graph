@@ -1,10 +1,14 @@
 
 import * as graphlib from 'graphlib';
 import {
+    BaseMappingData,
     ConditionClause,
     Mapping,
-    WrappedMappingData
+    WrappedMappingData,
+    equal
 } from 'simple-typed-sql';
+import { ComparisonValueType, ComparisonOperandType } from 'simple-typed-sql/lib/condition';
+import { AttributeDefinition } from 'simple-typed-sql/lib/mapping';
 
 import { CustomError } from './common';
 
@@ -14,7 +18,7 @@ export interface Join<T, U> {
     joinCondition: ConditionClause
 }
 
-export type JoinPath = Join<void, void>[];
+export type JoinPath = Join<{}, {}>[];
 
 export class SqlGraph {
     private graph = new graphlib.Graph();
@@ -27,8 +31,8 @@ export class SqlGraph {
         detailMapping: Mapping<U>,
         joinCondition: ConditionClause
     ) {
-        let masterTableName = WrappedMappingData.getMapping(masterMapping).getTableName();
-        let detailTableName = WrappedMappingData.getMapping(detailMapping).getTableName();
+        let masterTableName = WrappedMappingData.getMappingData(masterMapping).getTableName();
+        let detailTableName = WrappedMappingData.getMappingData(detailMapping).getTableName();
 
         this.graph.setNode(masterTableName, masterMapping);
         this.graph.setNode(detailTableName, detailMapping);
@@ -44,6 +48,21 @@ export class SqlGraph {
         return join;
     }
 
+    addSimpleMasterDetailJoin<T extends ComparisonValueType>(masterAttribute: T, detailAttribute: T) {
+        let masterAttributeDefinition: ComparisonOperandType = masterAttribute;
+        let detailAttributeDefinition: ComparisonOperandType = detailAttribute;
+
+        if (masterAttributeDefinition instanceof AttributeDefinition && detailAttributeDefinition instanceof AttributeDefinition) {
+            return this.addMasterDetailJoin(
+                masterAttributeDefinition.mapping,
+                detailAttributeDefinition.mapping,
+                equal(masterAttribute, detailAttribute)
+            );
+        } else {
+            throw Error("Join attributes must be of type AttributeDefinition.");
+        }        
+    }
+
     addJoin<T, U>(join: Join<T, U>) {
         this.addMasterDetailJoin(join.masterMapping, join.detailMapping, join.joinCondition);
     }
@@ -52,14 +71,14 @@ export class SqlGraph {
      * Return a list of joins linking the source relation to the target.
      */
     getJoinPath<T, U>(sourceMapping: Mapping<T>, targetMapping: Mapping<U>): JoinPath {
-        let sourceTableName = WrappedMappingData.getMapping(sourceMapping).getTableName();
-        let targetTableName = WrappedMappingData.getMapping(targetMapping).getTableName();
+        let sourceTableName = WrappedMappingData.getMappingData(sourceMapping).getTableName();
+        let targetTableName = WrappedMappingData.getMappingData(targetMapping).getTableName();
 
         let edgeData = graphlib.alg.dijkstra(this.graph, sourceTableName);
         
         let edgeTargetNode = targetTableName;
 
-        let joinPath: Join<void, void>[] = []; 
+        let joinPath: Join<{}, {}>[] = []; 
         while (edgeTargetNode !== sourceTableName) {
             let edge = edgeData[edgeTargetNode];
             
@@ -82,7 +101,7 @@ export class SqlGraph {
     }
 
     private getNodeMapping(tableName: string) {
-        return this.graph.node(tableName) as Mapping<void>;
+        return this.graph.node(tableName) as Mapping<{}>;
     }
 
     private getEdgeJoinCondition(sourceTableName: string, targetTableName: string) {

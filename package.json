@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "graphlib": "^2.1.1",
-    "simple-typed-sql": "^0.6.6"
+    "simple-typed-sql": "^0.8.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
