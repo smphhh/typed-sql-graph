@@ -88,6 +88,11 @@ describe("SQL Graph", function () {
         expect(function () { sqlGraph.getJoinPath(mappings.category, mappings.order) }).to.throw(SqlGraphTopologyError);
     });
 
+    it("should generate empty join paths for identity mappings", function () {
+        let joinPath = sqlGraph.getJoinPath(mappings.orderDetail, mappings.orderDetail);
+        expect(joinPath.length).to.equal(0);
+    });
+
     it("should generate from queries with joins corresponding to the join path", function () {
         let joinPath = sqlGraph.getJoinPath(mappings.orderDetail, mappings.category);
 
